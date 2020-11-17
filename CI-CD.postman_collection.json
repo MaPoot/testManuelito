@@ -1,0 +1,1920 @@
+{
+	"info": {
+		"_postman_id": "b0fac93d-d308-4b8e-9337-7231a4352c79",
+		"name": "CI/CD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Main Flow2",
+			"item": [
+				{
+					"name": "Getting a Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4ef2862e-1a69-4cd1-8fdb-d995236f985f",
+								"exec": [
+									"pm.test('Generates a JWT Token for an anonymous user',function(){",
+									"pm.response.to.have.status(200);",
+									"",
+									"var { userToken:{ userId, token }} = JSON.parse(responseBody);",
+									"    pm.environment.set(\"TOKEN\", token);",
+									"    pm.environment.set(\"USER_ID\", userId);",
+									"    pm.response.to.be.withBody;",
+									"})",
+									"// eval(pm.environment.get(\"gettingToken\"))();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2cd745b1-9e75-4dda-8146-5a929874b6bc",
+								"exec": [
+									"pm.environment.unset(\"TOKEN\");",
+									"pm.environment.unset(\"USER_ID\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/v1/token/guest",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"token",
+								"guest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creating an application",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4ded74a6-6e41-4c2e-b622-a8056e3e9b60",
+								"exec": [
+									" const { id } = JSON.parse(responseBody);",
+									"",
+									"",
+									"pm.test('Creating a new application',() =>{",
+									"    pm.response.to.have.status(200);   ",
+									"    pm.environment.set(\"APP_ID\", id);",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "11258f5f-628e-4b2e-8f22-fb90a8e22b3b",
+								"exec": [
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"mcc\": null,\n  \"industry\": null,\n  \"businessSize\": null,\n  \"orderId\": null,\n  \"businessOwners\": null,\n  \"businessInfo\": null,\n  \"transactionInfo\":null,\n  \"businessCategory\": null,\n  \"businessAddresses\": null,\n  \"businessLocations\": null,\n  \"applicantInfo\": null,\n  \"status\": {\n    \"orderId\": null,\n    \"progressCode\": 0,\n     \"internalOrderStatus\": {\n      \"id\": 1,\n      \"status\": \"InProgress\",\n      \"description\": \"User hasn’t submitted the application to FD\",\n      \"sendEmail\": false,\n      \"orderStage\": \"NotSent\",\n      \"externalOrderStatuses\": [\n        {\n          \"id\": 0,\n          \"orderProvider\": \"string\",\n          \"status\": \"string\",\n          \"description\": \"string\"\n        }\n      ]\n    },\n    \"externalOrderStatus\": null,\n    \"createdAt\": \"2020-09-10T20:36:20.815Z\",\n    \"lastUpdatedAt\": \"2020-09-10T20:36:20.815Z\"\n  },\n  \"userId\": \"{{USER_ID}}\",\n  \"businessPurchaseType\": 0,\n  \"id\": \"{{USER_ID}}\",\n  \"createdAt\": \"2020-09-10T20:36:20.815Z\",\n  \"updatedAt\": \"2020-09-10T20:36:20.815Z\",\n  \"createdBy\": {\n    \"id\": \"{{USER_ID}}\"\n  },\n  \"updatedBy\": {\n    \"id\": \"{{USER_ID}}\"\n  },\n  \"createdById\": \"{{USER_ID}}\",\n  \"updatedById\": \"{{USER_ID}}\"\n}\n"
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/applications/create",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[DEV] New Cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2ddca009-075e-473f-99bf-104b457ae74d",
+								"exec": [
+									"    pm.test('Generating a new Cart ID',function(){",
+									"        pm.response.to.have.status(200);",
+									"        const { id } = JSON.parse(responseBody);",
+									"        pm.environment.set(\"cartId\", id);",
+									"        ",
+									"    })",
+									"",
+									"// eval(pm.environment.get(\"newCart\"))();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "5ba5e3d0-cdba-4f0f-b71e-656d84837533",
+								"exec": [
+									"var gettingCart = ()=>{",
+									"    pm.test('Generating a new Cart ID',function(){",
+									"        pm.response.to.have.status(200);",
+									"        const { id } = JSON.parse(responseBody);",
+									"        pm.environment.set(\"cartId\", id);",
+									"        ",
+									"    })",
+									"}",
+									"pm.environment.set(\"newCart\",gettingCart.toString());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/cart/",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contact Info - Great, let's start by getting to know you...",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "50bd640d-872e-4a23-b859-8d8b931730ee",
+								"exec": [
+									"pm.test('Updating application information',function(){",
+									"    pm.response.to.have.status(200);   ",
+									"",
+									"})",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "bfda5e29-dd96-47e8-8f77-aaa2d2af63cf",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"progressCode\": 0,\n  \"application\": {\n    \"hasPoliticalTies\": false,\n    \"applicantInfo\": {\n      \"name\":\"{{$randomFirstName}}\", \n      \"lastName\":\"{{$randomLastName}}\",\n      \"email\":\"{{$randomEmail}}\",\n      \"phoneNumber\":\"454-345-4342\",\n      \"companyName\":\"{{$randomCompanyName}}\",\n      \"marketingConsent\": null,\n      \"existingClientCustomer\": true,\n      \"isKeyController\": true\n    }\n  }\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/applications/{{APP_ID}}/update",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{APP_ID}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Business size - What type of business do you run?",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b7abf2cf-b8ef-4367-9976-8cdd41439ca1",
+								"exec": [
+									"pm.test('Updating application information',function(){",
+									"    pm.response.to.have.status(200);   ",
+									"",
+									"})",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c033f26e-b110-4f46-b171-92f337daa663",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"application\": {\n    \"businessSize\": \"Small\"\n  }\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/applications/{{APP_ID}}/update",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{APP_ID}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Business type - Getting Categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e95db7f4-64ff-4925-a3cd-c057a31abb88",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let productCategoryArray=[];",
+									"let rndCat = Math.floor(Math.random() * 5);",
+									"",
+									"for (let x=0; x <= jsonData.length -1; x++){",
+									"  productCategoryArray.push(jsonData[x]);",
+									"}",
+									"",
+									"let categoryInfo= JSON.stringify( productCategoryArray[rndCat]);",
+									"pm.environment.set(\"rndmcategory\", categoryInfo);",
+									"",
+									"",
+									"pm.test('Getting Product Categories',function(){",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f39d5988-3d1b-4c0f-abe7-dedd838d8494",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_ID}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/products/categories",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Business type - Adding Category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f60c721d-a11b-47ce-a167-bcdee5af0b15",
+								"exec": [
+									"const  mainFlowCat = JSON.parse(responseBody);",
+									"",
+									"pm.test('Updating application information',function(){",
+									"    pm.response.to.have.status(200);   ",
+									"",
+									"})",
+									"",
+									"",
+									"pm.environment.set(\"mainFlowCat\", mainFlowCat.businessCategory.name);",
+									"pm.environment.set(\"mainFlowCatId\", mainFlowCat.businessCategory.id);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b93ad17f-f030-4c34-9003-e12f014f8d72",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"progressCode\": 10,\n  \"application\": {\n    \"businessCategory\": {{rndmcategory}}\n  }\n}"
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/applications/{{APP_ID}}/update",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{APP_ID}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Business type - Getting Industries description",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "85cde508-cb44-4360-a86a-13273e3c3219",
+								"exec": [
+									"const  mainFlowIndustries = JSON.parse(responseBody);",
+									"",
+									"//Verifying Code Status",
+									"pm.test('Verifying Code Status',function(){  ",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"",
+									"let rndmNum = Math.floor(Math.random() * mainFlowIndustries.length);",
+									"mainFlowInd = mainFlowIndustries[rndmNum].replace(/\\s/g,'%20');",
+									"pm.environment.set(\"mainFlowIndustries\", mainFlowInd);",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "20d5fcb3-4e65-4dcf-9a8e-c73602fbd45d",
+								"exec": [
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_ID}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/products/categories/{{mainFlowCat}}/industries",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"categories",
+								"{{mainFlowCat}}",
+								"industries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Business type - Getting Merchant Order",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8ac15990-d011-495e-aaf8-5c454e484637",
+								"exec": [
+									"let flowIndustries = pm.environment.get(\"mainFlowIndustries\").replace(/\\s/g, '%20');",
+									"",
+									"pm.environment.set(\"flowIndustries\", flowIndustries);",
+									"console.log(flowIndustries)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "57fb3a38-e670-4b8d-8fd7-6e58d2ae3023",
+								"exec": [
+									"const  mainFlowMcc= JSON.parse(responseBody);  ",
+									"",
+									"pm.test('Verifying Status Code',function(){",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"let rndmNum = Math.floor(Math.random() * mainFlowMcc.length);",
+									"let mainFlowRndmMcc = mainFlowMcc[rndmNum].mcc",
+									"pm.environment.set(\"mainFlowMcc\", mainFlowRndmMcc);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{DEV_URL}}/api/products/categories/{{mainFlowCat}}/Industry/{{mainFlowIndustries}}/merchantcategorycodes",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"categories",
+								"{{mainFlowCat}}",
+								"Industry",
+								"{{mainFlowIndustries}}",
+								"merchantcategorycodes"
+							]
+						},
+						"description": "Given the id of an existing cart, create an FD merchant order.\n\nThis endpoint should validate the cart with FD’s cart validation endpoint (  https://navysfighterweaponschool.atlassian.net/browse/XON-194), then submit the cart to /merchantorders ( https://developer.firstdata.com/marketplace/api/marketplace-apis.html#post-merchantorders ) and then save the orderId returned with the cart in our db."
+					},
+					"response": []
+				},
+				{
+					"name": "Business Type - What type of business do you run?",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "039fe8b9-ca25-4f4c-9a6f-30eb324bb870",
+								"exec": [
+									"pm.test('Updating application information',function(){",
+									"    pm.response.to.have.status(200);   ",
+									"",
+									"})",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c68f92fe-2d6f-44e2-98de-a64e9f6ce906",
+								"exec": [
+									"let mainFlowIndustries = pm.environment.get(\"mainFlowIndustries\");",
+									"",
+									"mainFlowInd = mainFlowIndustries.replace(/\\%20/g,' ');",
+									"pm.environment.set(\"mainFlowInd\", mainFlowInd);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"progressCode\": 20,\n  \"application\": {\n    \"mcc\": \"{{mainFlowMcc}}\",\n    \"industry\": \"{{mainFlowInd}}\"\n  }\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/applications/{{APP_ID}}/update",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{APP_ID}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Payment types - Where do you plan on taking the majority of your payments?",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f5511a10-4b6b-4ec1-9c68-8bf81173b4b9",
+								"exec": [
+									"pm.test('Adding a Business Purchase Type to the application',function(){",
+									"    pm.response.to.have.status(200);   ",
+									"",
+									"})",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "beef0e3b-5908-4119-b097-96ccd76e6929",
+								"exec": [
+									"let rndmPurchaseType =Math.floor(Math.random() * 4);",
+									"pm.environment.set(\"rndmPurchaseTypeNum\", rndmPurchaseType);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"progressCode\": 20,\n  \"application\": {\n    \"businessPurchaseType\": 3,\n    \"threatMetrixGuid\": \"test\"\n  }\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/applications/{{APP_ID}}/update",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{APP_ID}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Payment-Info - Let's get an idea of your financial picture",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bd50e3e5-ceba-4cbc-bccd-9e669ce8d7af",
+								"exec": [
+									"pm.test('Updating application information',function(){",
+									"    pm.response.to.have.status(200);   ",
+									"",
+									"})",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "66083fac-1bc9-4e10-b912-991bd7e1ca95",
+								"exec": [
+									"let mainFlowIndustries = pm.environment.get(\"mainFlowIndustries\");",
+									"",
+									"mainFlowInd = mainFlowIndustries.replace(/\\%20/g,' ');",
+									"pm.environment.set(\"mainFlowInd\", mainFlowInd);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"progressCode\": 30,\n  \"application\": {\n    \"transactionInfo\": {\n      \"totalAnnualSales\":  1000000,\n      \"averageTicketValue\": 5000,\n      \"highTicketValue\": 10000,\n      \"creditCardVolume\": 10000000,\n      \"numberOfLocations\": 1,\n      \"amexAnnualVolume\": 100000,\n      \"amexmemberId\": 1234516791\n    }\n  }\n}"
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/applications/{{APP_ID}}/update",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{APP_ID}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Package-selection - Recommended packages just for you!",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4f3aa7ce-4d45-44e8-9795-d9a309d33bdf",
+								"exec": [
+									"pm.test('Verifying Code Status response',function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a8296250-75e7-49b9-aa61-261431839303",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/products/recommendedproducts?businessSize=Small&categoryId={{mainFlowCatId}}&businessPurchaseType={{rndmPurchaseTypeNum}}",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"recommendedproducts"
+							],
+							"query": [
+								{
+									"key": "businessSize",
+									"value": "Small"
+								},
+								{
+									"key": "categoryId",
+									"value": "{{mainFlowCatId}}"
+								},
+								{
+									"key": "businessPurchaseType",
+									"value": "{{rndmPurchaseTypeNum}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[DEV] Adding Product - Terminal (shippable)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "31b861c6-1761-453d-982f-3ce16828e3bd",
+								"exec": [
+									"pm.test('Setting Product Quantity',function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "72007b67-6e56-4266-8b09-6b815a0b7483",
+								"exec": [
+									"const products = [ \"89262\",\"10012\", \"10020\", \"10045\", \"777-1000105303\",\"88182\"];",
+									"let randomProduct = products[Math.floor(Math.random() * products.length)];",
+									"pm.environment.set('productId',randomProduct);",
+									"  "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"id\": \"90622\",\n    \"quantity\": 1,\n    \"purchaseType\": \"P\"\n  }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/cart/{{cartId}}/setproductquantity",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"{{cartId}}",
+								"setproductquantity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[DEV] Adding Product - Acquiring (Not shippable)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c80dce57-593f-44ab-a86d-9523ea62d3e7",
+								"exec": [
+									"pm.test('Adding Product needs (Clover Register Software)',function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "7a5a46d6-eb5e-4e0b-91de-d16c878745ec",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"id\": \"777-1000000477\",\n    \"quantity\": 1,\n    \"purchaseType\": \"P\"\n  }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/cart/{{cartId}}/setproductquantity",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"{{cartId}}",
+								"setproductquantity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[DEV] Adding Product - Access (shippable)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d3663d54-1669-428f-a4dc-c45717c20b71",
+								"exec": [
+									"pm.test('Adding Product needs  (Tier)',function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "3e64765e-0aaf-4db9-9426-0c73456dd3f1",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"id\": \"67664\",\n    \"quantity\": 1,\n    \"purchaseType\": \"P\"\n  }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/cart/{{cartId}}/setproductquantity",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"{{cartId}}",
+								"setproductquantity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[DEV] Set shipping location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "57ae91e4-5b3c-46dc-9ce0-38330a5e8535",
+								"exec": [
+									"pm.test('Setting shipping location',function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "68e47981-8e19-47df-97ad-e369e7dc1508",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"firstName\": \"{{$randomFirstName}}\",\n    \"lastName\": \"{{$randomLastName}}\",\n    \"companyName\": \"{{$randomCompanyName}}\",\n    \"address\": {\n      \"address1\": \"{{$randomStreetAddress}}\",\n      \"address2\": \"{{$randomStreetName}}\",\n      \"city\": \"{{$randomCity}}\",\n      \"state\": \"AZ\",\n      \"zip\": \"85621\"\n    },\n    \"productsToShip\": [\n\n      {\n        \"productId\": \"90622\",\n        \"quantity\": 1,\n        \"purchaseType\": \"P\",\n        \"paymentType\": \"string\",\n        \"paymentTerm\": \"string\"\n      },\n      {\n            \"productId\": \"67664\",\n            \"quantity\": 1,\n            \"purchaseType\": \"P\",\n            \"paymentType\": \"Purchased\",\n            \"paymentTerm\": \"\"\n      }\n    ]\n  }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/cart/{{cartId}}/shippinglocations",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"{{cartId}}",
+								"shippinglocations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[DEV] Validating Cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f4322e5f-3367-4826-9dbc-c6a4865cae1b",
+								"exec": [
+									"let jsonDataResult = pm.response.json();",
+									"pm.test('Validating Cart',function(){",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(jsonDataResult.isCartValid).to.eql(true);",
+									"    pm.expect(jsonDataResult.cartErrors).to.eql([]);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d4667708-24d6-4899-b966-f119a4209794",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/cart/{{cartId}}/validate",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"{{cartId}}",
+								"validate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Getting organization types",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a634dc49-ffda-49d6-8768-86e913448e9d",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let organizationTypesArray=[];",
+									"let rndOrg = Math.floor(Math.random() * 7);",
+									"",
+									"",
+									"// console.log(jsonData[0].code);",
+									"for (let x=0; x <= jsonData.length -1; x++){",
+									"  organizationTypesArray.push(jsonData[x]);",
+									"}",
+									"",
+									"",
+									"let organizationTypeInfo= JSON.stringify( organizationTypesArray[rndOrg]);",
+									"pm.environment.set(\"rndmOrgType\", organizationTypeInfo);",
+									"",
+									"",
+									"pm.test('Getting Product Categories',function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"",
+									"pm.test('Verifying Code Status',()=>{",
+									"    pm.response.to.have.status(200);   ",
+									"",
+									"})",
+									"",
+									"",
+									"pm.test('Verifying Sole Proprietorship Code and description',()=>{",
+									"    pm.expect(jsonData[0].code).to.eql(\"I\");",
+									"    pm.expect(jsonData[0].description).to.eql(\"Sole Proprietorship\");",
+									"})",
+									"",
+									"",
+									"pm.test('Verifying Partnership Code and description',()=>{",
+									"    pm.expect(jsonData[1].code).to.eql(\"P\");",
+									"    pm.expect(jsonData[1].description).to.eql(\"Partnerships\");",
+									"})",
+									"",
+									"",
+									"pm.test('Verifying Public Corporation Code and description', ()=>{",
+									"    pm.expect(jsonData[2].code).to.eql(\"C\");",
+									"    pm.expect(jsonData[2].description).to.eql(\"Public Corporation\");",
+									"})",
+									"",
+									"pm.test('Verifying Private Corporation Code and description', ()=>{",
+									"    pm.expect(jsonData[3].code).to.eql(\"PRC\");",
+									"    pm.expect(jsonData[3].description).to.eql(\"Private Corporation\");",
+									"})",
+									"",
+									"pm.test('Verifying Limited Liability Company and description', ()=>{",
+									"    pm.expect(jsonData[4].code).to.eql(\"L\");",
+									"    pm.expect(jsonData[4].description).to.eql(\"Limited Liability Company (LLC)\");",
+									"})",
+									"",
+									"",
+									"pm.test('Verifying Tax Exempt Code and description', ()=>{",
+									"    pm.expect(jsonData[5].code).to.eql(\"T\");",
+									"    pm.expect(jsonData[5].description).to.eql(\"Tax Exempt\");",
+									"})",
+									"",
+									"",
+									"pm.test('Verifying Government and description', ()=>{",
+									"    pm.expect(jsonData[6].code).to.eql(\"G\");",
+									"    pm.expect(jsonData[6].description).to.eql(\"Government\");",
+									"})",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{DEV_URL}}/api/organizationtypes",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"organizationtypes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Business info - Let's gather a few more details about your business",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "46d42bf8-c5f1-482a-9b73-6f7758053a1b",
+								"exec": [
+									"pm.test('Updating application information',function(){",
+									"    pm.response.to.have.status(200);   ",
+									"",
+									"})",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "837de4fb-2677-4339-9001-ec0f0d7b4db4",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"application\": {\n        \"businessInfo\": {\n            \"taxId\": \"342242342\",\n            \"taxIdConfirmation\": \"342242342\",\n            \"legalName\": \"{{$randomCompanyName}}\",\n            \"dbaName\": \"{{$randomCompanyName}}\",\n            \"taxFilingName\": \"{{$randomCompanyName}}\",\n            \"organizationType\": {{rndmOrgType}},\n            \"phone\": \"345-434-5435\",\n            \"email\": \"{{$randomEmail}}\",\n            \"website\": \"andres.com\",\n            \"tinType\": 1,\n            \"startDate\": \"1990-11-22T06:00:00Z\"\n        }\n    }\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/applications/{{APP_ID}}/update",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{APP_ID}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Business Addresses - Where is your business located?",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b2bcd998-97e7-4400-9f2e-ccd430fb2314",
+								"exec": [
+									"pm.test('Updating application information',function(){",
+									"    pm.response.to.have.status(200);   ",
+									"",
+									"})",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "80f0b8a1-1ec8-4afc-b855-3d73184cfe46",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"application\": {\n    \"businessAddresses\": {\n      \"legalAddress\": {\n        \"address1\": \"{{$randomStreetAddress}}\",\n        \"address2\": \"{{$randomStreetAddress}}\",\n        \"city\": \"{{$randomCity}}\",\n        \"state\": \"AZ\",\n        \"zip\": \"85002\"\n      }\n},\n    \"businessLocations\": [\n      {\n        \"name\": \"{{$randomCompanyName}}\",\n        \"isPrimary\": true,\n        \"address\": {\n        \"address1\": \"{{$randomStreetAddress}}\",\n        \"address2\": \"{{$randomStreetAddress}}\",\n        \"city\": \"{{$randomCity}}\",\n        \"state\": \"AZ\",\n        \"zip\": \"85002\"       \n        },\n        \"equipment\": []\n      }\n    ]\n  }\n}\n",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/applications/{{APP_ID}}/update",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{APP_ID}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Owners -Tell us more about the ownership of your business",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d8e09bc9-92c2-4899-98b4-256a089caeea",
+								"exec": [
+									"pm.test('Updating application information',function(){",
+									"    pm.response.to.have.status(200);   ",
+									"",
+									"})",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "550280c1-c7c8-48bc-ae67-93ea5bd1b213",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"application\": {\n   \"businessOwners\": [\n      {\n        \"firstName\": \"{{$randomFirstName}}\",\n        \"lastName\": \"{{$randomLastName}}\",\n        \"title\": \"Sole Ownership\",\n        \"address\": {\n          \"address1\": \"{{$randomStreetAddress}}\",\n          \"address2\": \"{{$randomStreetAddress}}\",\n          \"city\": \"{{$randomCity}}\",\n          \"state\": \"ga\",\n          \"zip\": \"30030\"\n        },\n        \"phone\": \"345-434-5434\",\n        \"email\": \"{{$randomEmail}}\",\n        \"dateOfBirth\": \"1984-08-10T18:37:28.800Z\",\n        \"socialSecurityNumber\": \"202111111\",\n        \"percentageOwnership\": 50,\n        \"primaryOwner\": true,\n        \"isKeyController\": true,\n        \"hasPoliticalTies\": true\n      },\n      {\n        \"firstName\": \"{{$randomFirstName}}\",\n        \"lastName\": \"{{$randomLastName}}\",\n        \"title\": \"owner\",\n        \"address\": {\n          \"address1\": \"{{$randomStreetAddress}}\",\n          \"address2\": \"{{$randomStreetAddress}}\",\n          \"city\": \"{{$randomCity}}\",\n          \"state\": \"ga\",\n          \"zip\": \"30030\"\n        },\n        \"phone\": \"345-434-5434\",\n        \"email\": \"{{$randomEmail}}\",\n        \"dateOfBirth\": \"1984-08-10T18:37:28.800Z\",\n        \"socialSecurityNumber\": \"202111111\",\n        \"percentageOwnership\": 50,\n        \"primaryOwner\": true,\n        \"isKeyController\": true,\n        \"hasPoliticalTies\": true\n      }\n      \n    ]\n  }\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/applications/{{APP_ID}}/update",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{APP_ID}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bank - Where do you want us to send your money?",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "944d49eb-2c92-434b-bfe6-bc3e80c3cbd7",
+								"exec": [
+									"pm.test('Updating application information',function(){",
+									"    pm.response.to.have.status(200);   ",
+									"",
+									"})",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e663277a-312b-4d42-beaf-6db76a9fbf60",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"application\": {\n    \"bankInfo\": {\n        \"routingNumber\": \"123456789\",\n        \"bankName\": \"123456789\",\n        \"accountNumber\": \"test\"\n    }\n  }\n}"
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/applications/{{APP_ID}}/update",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{APP_ID}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[DEV] Cart Checkout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f1ce322a-56f7-42ca-9b74-9d836e3f01cd",
+								"exec": [
+									"let jsonDataResult = pm.response.json();",
+									"",
+									"pm.test('Cart Checkout',function(){",
+									"    pm.response.to.have.status(200);",
+									"     pm.expect(pm.response.text()).to.include(\"orderId\");",
+									"",
+									"});",
+									"",
+									"pm.environment.set(\"orderId\", jsonDataResult.orderId);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "be4f16c1-f44c-447c-b99b-506b1acb79a2",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/cart/{{cartId}}/checkout",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"{{cartId}}",
+								"checkout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adding OrderID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "246e6d59-5de2-4840-b1b2-fa1202a8a426",
+								"exec": [
+									"pm.test('Creating a new application ',function(){",
+									"    pm.response.to.have.status(200);   ",
+									"})",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2e46fc26-331e-41a3-a413-bc81f9499a7a",
+								"exec": [
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"application\": {\n    \"orderId\": \"{{orderId}}\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/applications/{{APP_ID}}/update",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{APP_ID}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Saving application",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4e185ba8-11f9-4b2f-872f-157829480c00",
+								"exec": [
+									"pm.test('Saving application',function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b0430b7b-0e0a-4b97-8117-f16c1b5d900a",
+								"exec": [
+									"const industries = [\"Medical Services and Doctors\", \"Restaurant Beverage and Food\", \"Home and Garden (Hardware, Florists, Home Supply)\", \"Contractors (Plumbers, Electricians, etc)\", \"Business to Business - Wholesale (Services)\"];",
+									"const categories = [\"Champagne Producers\", \"Grocery Supermarkets\",\"Freezer and Locker Meat Provisioners\",\"Candy, Nut and Confectionery Stores\", \"Dairy Products Stores\"];",
+									"let randomIndustries = industries[Math.floor(Math.random() * industries.length)];",
+									"let randomCategories = categories[Math.floor(Math.random() * categories.length)];",
+									"pm.environment.set('randomIndustries',randomIndustries);",
+									"pm.environment.set('randomCategories',randomCategories);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"andres@xuppay.com\"\n}"
+						},
+						"url": {
+							"raw": "{{DEV_URL}}/api/applications/{{APP_ID}}/save",
+							"host": [
+								"{{DEV_URL}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{APP_ID}}",
+								"save"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "c4b34242-cef3-4ac4-a683-e687d0eaf9cc",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "aaac205f-7774-4f9f-9d1c-916933562944",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

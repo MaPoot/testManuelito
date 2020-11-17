@@ -1,0 +1,14 @@
+{
+	"id": "e74b18c6-4ff7-4cf8-a931-4a64f0778650",
+	"name": "Test",
+	"values": [
+		{
+			"key": "DEV_URL",
+			"value": "https://dev.xupsupport.com/",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2020-11-17T21:46:04.756Z",
+	"_postman_exported_using": "Postman/7.34.0"
+}
