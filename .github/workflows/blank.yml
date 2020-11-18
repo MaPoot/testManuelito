@@ -26,3 +26,4 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: newman run CI-CD.postman_collection.json -e Test_environment.json
+    - run: git clone https://github.com/andycarson182/testManuelito.git
